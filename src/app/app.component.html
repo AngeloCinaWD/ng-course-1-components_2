@@ -6,9 +6,5 @@
 </div>
 
 <div class="courses">
-  <course-card
-    (courseSelected)="onCardClicked($event)"
-    [course]="courses[0]"
-    [indice]="courses[0].id"
-  />
+  <course-card (courseSelected)="onCardClicked($event)" [course]="courses[0]" />
 </div>

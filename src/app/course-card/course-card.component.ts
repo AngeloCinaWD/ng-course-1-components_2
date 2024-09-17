@@ -17,25 +17,14 @@ export class CourseCardComponent {
   })
   course: Course;
 
-  // indice dell'elemento ricevuto come @Input
-  @Input({ required: true })
-  indice: number;
-
   // creo l'evento custom courseSelected ed indico che emetterà un oggetto Course
   // devo utilizzare il decoaratore @Output
   @Output()
   courseSelected = new EventEmitter<Course>();
 
-  @Input()
-  count: number;
-
   onCourseViewed() {
     // quando clicco emetterò l'evento custom courseSelected e gli passo quello che voglio trasmettere come payload
     this.courseSelected.emit(this.course);
-  }
-
-  buttonIsVisible() {
-    return this.course.id === 1 || this.course.id === 5;
   }
 
   checkIconUrl() {
