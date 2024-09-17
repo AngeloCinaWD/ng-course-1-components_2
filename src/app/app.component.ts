@@ -24,5 +24,7 @@ export class AppComponent implements AfterViewInit {
 
   // per interrogare elementi nativi del DOM, pieno html, utilizzo il tipo ElementRef
 
-  onCardClicked(course: Course) {}
+  onCardClicked(course: Course) {
+    console.log(course);
+  }
 }

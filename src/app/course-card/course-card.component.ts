@@ -30,24 +30,4 @@ export class CourseCardComponent {
   checkIconUrl() {
     return this.course.iconUrl;
   }
-
-  isBeginner() {
-    return this.course.category === "BEGINNER";
-  }
-
-  checkCategory() {
-    return `${this.course.category.toLowerCase()}`;
-  }
-
-  textDecoration() {
-    return "underline";
-  }
-
-  checkTextStyle() {
-    return {
-      color: this.course.id === 1 ? "yellow" : "black",
-      "text-decoration":
-        this.course.category !== "BEGINNER" ? "underline" : "no",
-    };
-  }
 }
