@@ -1,0 +1,11 @@
+.course-card.beginner {
+  background-color: green;
+}
+
+.course-card.intermediate {
+  background-color: orange;
+}
+
+.course-card.advanced {
+  background-color: red;
+}

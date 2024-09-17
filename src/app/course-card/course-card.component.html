@@ -1,0 +1,112 @@
+<!-- utilizzo l'*ngIf per controllare se il corso esiste o no -->
+<!-- CONDITIONAL STYLE -->
+<!-- per assegnare una classe css secondo una condizione utilizzo la direttiva [ngClass] alla quale posso passare una stringa tra singoli apici con il nome delle classi, es. [ngClass]="'beginner course-card'", oppure un array di stringhe ['beginner', 'course-card'] -->
+<!-- ngClass è pensato per assegnare style secondo condizioni, posso passare un oggetto con il nome delle classi e la condizione [ngClass]="{ beginner: true }"-->
+<!-- o definendo un metodo che mi restituisca un booleano -->
+<!-- o definendo un metodo che mi restituisca il nome delle classi come stringhe o array di stringhe, [ngClass]="checkCategory()" -->
+<div class="course-card" *ngIf="course" [ngClass]="checkCategory()">
+  <!-- CONDITIONAL RENDERING -->
+  <!-- direttiva @if, mi permette di renderizzare qualcosa a seconda se una condizione è rispettata o meno -->
+  <!-- in questo caso sto mostrando il div solo se l'indice è disparo, quindi dividendo per 2 dà il resto -->
+  @if (indice%2 > 0) {
+  <div class="course-title">
+    Corso {{ indice + 1 }}/{{ count }}, indice disparo: {{ indice }}
+  </div>
+  }
+  <!-- direttiva @else, mi permette di stabilire un'alternativa -->
+  @else {
+  <div class="course-title">
+    Corso {{ indice + 1 }}/{{ count }}, indice paro: {{ indice }}
+  </div>
+  }
+
+  <!-- ELVIS OPERATOR -->
+  <!-- se non controllo se il corso esiste avrò un errore ad esempio per ricavare course.description, per evitarlo posso dire ad ng di verificare la proprietà solo se esiste il corso -->
+  <!-- lo faccio utilizzando l'Elvis operator, il punto interrogativo prima del dot della notation -->
+  <!-- NG STYLE -->
+  <!-- assegnare direttamente style css tramite condizioni -->
+  <!-- direttiva style.nomeproprietàcss="'valore'" mi permette di applicare un singolo style alla volta-->
+  <!-- con [ngStyle] posso passare un oggetto con proprietà e valore, anche richiamando una propretà nel .ts o un metodo, [ngStyle]="{ 'text-decoration': 'underline' }", [ngStyle]="{ 'text-decoration': textDecoration() }" -->
+  <div class="course-title" [ngStyle]="checkTextStyle()">
+    {{ course?.description }}
+  </div>
+
+  <!-- utilizzo @if, @else if, @else -->
+  <!-- la condizione nell'else if restituisce false sia se la proprietà è null, undefined o anche stringa vuota -->
+  <!-- nella condizione si può richiamare un metodo definito nel .ts che ritorni un booleano -->
+  <!-- in questo caso il primo ed il terzo elemento non avranno l'immagine perchè hanno course.id 1 e 3, il secondo ha stringa vuota come iconUrl e quindi non avrà l'immagine ma l'h1 Nessuna immagina disponibile -->
+  @if (course.id === 1 || course.id === 3) {
+  <h1>corso con id 1 0 3</h1>
+  } @else if (checkIconUrl()) {
+  <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
+  } @else {
+  <h1>Nessuna immagine disponibile</h1>
+  }
+
+  <!-- la vecchia direttiva *ngIf si utilizza all'interno del tag di apertura dell'elemento che ci interessa -->
+  <!-- il primo elemento ha longDescription stringa vuota -->
+  <!-- la vecchia direttiva non supporta il caso else if -->
+  <div class="course-description" *ngIf="course.longDescription">
+    {{ course.longDescription }}
+  </div>
+
+  <!-- @switch, @case, @default -->
+  <div class="course-category">
+    @switch (course.category) { @case ("BEGINNER") {
+    <div class="category">Beginner</div>
+    } @case ("INTERMEDIATE") {
+    <div class="category">Intermediate</div>
+    } @case ("ADVANCED") {
+    <div class="category">Advanced</div>
+    } @default {
+    <div class="category">No Category</div>
+    } }
+  </div>
+
+  <!-- [ngSwitch], *ngSwitchCase, *ngSwithDefault -->
+  <!-- la direttiva si mette con le quadre nell'elemento contenitore, i casi ed il default con l'asterisco nel tag di apertura dell'elemento che voglio renderizzare, in questo caso il valore deve essere passato come stringa quindi fra apici singoli nei doppi apici -->
+  <div class="course-category" [ngSwitch]="course.category">
+    <div *ngSwitchCase="'BEGINNER'" class="category">Beginner</div>
+
+    <div *ngSwitchCase="'INTERMEDIATE'" class="category">Intermediate</div>
+
+    <div *ngSwitchCase="'ADVANCED'" class="category">Advanced</div>
+
+    <div *ngSwitchDefault class="category">No Category</div>
+  </div>
+
+  <!-- NG-CONTAINER -->
+  <!-- come visto per applicare le vecchie direttive come *ngFor, o [ngSwitch] ho bisogno di un elemento padre -->
+  <!-- non è sempre possibile, potrei creare un div che racchiude tutto ma non vanno creati elementi extra per wrappare solo per applicare una direttiva -->
+  <!-- si utilizza invece il tag ng-container -->
+  <ng-container [ngSwitch]="course.category">
+    <div class="course-category">
+      <ng-container *ngSwitchCase="'BEGINNER'">
+        <div class="category">Beginner</div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'INTERMEDIATE'">
+        <div class="category">Intermediate</div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'ADVANCED'">
+        <div class="category">Advanced</div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <div class="category">No Category</div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <!-- si può utilizzare anche una funzione per definire la condizione dell'if -->
+  <!-- per definire un'alternativa utilizzo la special key else facendo riferimento ad un blocco di codice contenuto in un ng-template che va contrassegnato con una template reference -->
+  <button
+    (click)="onCourseViewed()"
+    *ngIf="buttonIsVisible(); else alternativa"
+  >
+    View Course
+  </button>
+  <ng-template #alternativa>
+    <h1>Il button non è visibile, l'id del corso non è 1 o 5</h1>
+  </ng-template>
+</div>

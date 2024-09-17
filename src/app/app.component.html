@@ -1,0 +1,209 @@
+<div class="top-menu">
+  <img
+    class="logo"
+    src="https://angular-academy.s3.amazonaws.com/main-logo/main-page-logo-small-hat.png"
+  />
+</div>
+
+<!-- BUTTON PER LA PROVA DEL CHANGES PER IL DECOARATOR @VIEWCHILDREN() -->
+<div class="courses">
+  <button (click)="aggiungiCorso()">Aggiungi Corso</button>
+</div>
+
+<!-- VIEW CHILD DECORATOR E VIEW CHILDREN -->
+<!-- permettono di creare riferimenti ad elementi del template nel .ts, per ottenere delle query dal modello -->
+<!-- template reference ad un elemento che ne contiene altri -->
+<div class="courses" #container>
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="courses[0]"
+    [indice]="courses[0].id"
+  />
+
+  <!-- VIEW CHILD DECORATOR E VIEW CHILDREN -->
+  <!-- posso interrogare un elemento nel template dandogli un nome tramite TEMPLATE REFERENCE ed interrogarlo nel .ts-->
+  <course-card
+    #cardRef
+    (courseSelected)="onCardClicked($event)"
+    [course]="courses[4]"
+    [indice]="courses[4].id"
+  />
+</div>
+
+<!--ANGULAR PIPES -->
+<!-- si utilizzano nel template per manipolare la visualizzazione dei dati -->
+
+<div class="demo">
+  <!-- si vede tutto l'oggetto -->
+  <div>{{ startDate }}</div>
+  <!-- Sep 8, 2024 -->
+  <div>{{ startDate2 | date }}</div>
+  <!-- 8/9/24 -->
+  <div>{{ startDate2 | date : "d/M/yy" }}</div>
+  <!-- 08/09/2024 -->
+  <div>{{ startDate2 | date : "dd/MM/yyyy" }}</div>
+  <!-- 08/Sep/2024 -->
+  <div>{{ startDate2 | date : "dd/MMM/yyyy" }}</div>
+  <!-- Angular core deep dive -->
+  <div>{{ title }}</div>
+  <!-- ANGULAR CORE DEEP DIVE -->
+  <div>{{ title | uppercase }}</div>
+  <!-- angular core deep dive -->
+  <div>{{ title | lowercase }}</div>
+  <!-- Angular Core Deep Dive -->
+  <div>{{ title | titlecase }}</div>
+  <!-- 9.999934 -->
+  <div>{{ price }}</div>
+  <!-- 010.000 -->
+  <div>{{ price | number : "3.3" }}</div>
+  <!-- 009.99993 indicato il minimo e massimo numero di decimali-->
+  <div>{{ price | number : "3.3-5" }}</div>
+  <!-- 00,009.9999 -->
+  <div>{{ price | number : "5.4" }}</div>
+  <!-- $10.00 utilizza il dollaro di default -->
+  <div>{{ price | currency }}</div>
+  <!-- €10.00 -->
+  <div>{{ price | currency : "EUR" }}</div>
+  <!-- 67% -->
+  <div>{{ rate | percent }}</div>
+  <!-- ANGULAR -->
+  <div>{{ title | uppercase | slice : 0 : 7 }}</div>
+</div>
+
+<!-- i pipes possono essere applicati anche agli array -->
+<!-- il pipe slice accetta 2 parametri il primo è il numero di indice dell'elemento compreso e l'indice dell'elemento non compreso, quindi con 0 e 2 prendo gli elementi con indice 0 ed 1 -->
+<div class="courses">
+  <course-card
+    *ngFor="
+      let course of courses | slice : 0 : 2;
+      count as count;
+      index as indice;
+      first as first;
+      last as last;
+      even as even;
+      odd as odd
+    "
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [count]="count"
+    [indice]="indice"
+    [class.is-first]="first"
+    [class.is-last]="last"
+    [class.is-even]="even"
+    [class.is-odd]="odd"
+  />
+</div>
+
+<!-- il pipe keyvalue mi restituisce da un oggetto un array contenente coppie chiave/valore, in ordine alfabetico per la chiave  -->
+<div *ngFor="let pair of courses[0] | keyvalue">
+  {{ pair.key }} : {{ pair.value }}
+</div>
+
+<!-- <div class="courses"> -->
+<!-- voglio passare un valore ad una proprietà all'interno del card-component, utilizzo le parentesi quadre per dire che quello che sarà nei doppi apici deve essere inteso come codice javascript -->
+<!-- nel .ts del componente course-card utilizzo il decoratore @input per dire che il valore della proprietà input viene passato dall'esterno -->
+<!-- creo un evento custom courseSelected che verrà propagato dal componente course-card e ascoltato dal componente padre app.component (bubbling event) che triggererà il metodo onCardClicked-->
+<!-- per ricevere il payload dell'evento custom creato in course-card utilizzo la variabile speciale $event -->
+<!-- <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="coreCourse"
+  ></course-card>
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="rxjsCourse"
+  ></course-card>
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="ngrxCourse"
+  ></course-card> -->
+<!-- commento i singoli componenti e li mostrerò utilizzando la direttiva @for -->
+<!-- </div> -->
+
+<!-- VIEWCHILDREN DECORATOR -->
+<div class="courses">
+  <!-- il componente può essere chiuso senza il tag di chiusura, aggiungendo / -->
+  <!-- il for loop deve avere una track expression è obbligatoria, serve per dire ad angular cosa cambia nei dati, ad esempio aggiungo o elimino un corso ed andrà a modificare solo il nuovo, quindi un modo di identificare ogni singolo elemento, utilizzo l'id del course -->
+  <!-- @for (course of courses; track course.id) {
+  <course-card (courseSelected)="onCardClicked($event)" [course]="course" />
+  } -->
+  <!-- abbiamo diverse opzioni che possiamo utilizzare nel @for, ottenere alcuni valori da salvare in una variabile tramite special key e passarli al componente che li riceve come @Input, posso ricavare l'indice dell'item iterato special key $index, $count totale elementi, $first e $last permettono di identificare il primo e l'ultimo elemento (utili per il CSS, restituiscono un booleano), $even e $odd booleano per indice paro o disparo -->
+  <!-- queste proprietà  posso utilizzarle direttamente con la special key non ho bisogno di creare una variabile, lo faccio se voglio utilizzare un altro nome, ad esempio posso rimuovere let indice = $index ed utilizzare direttamente $index-->
+  <!-- @for (course of courses; track course.id; let indice = $index; let
+  totaleElementi = $count; let primo = $first; let ultimo = $last; let paro =
+  $even; let disparo = $odd) {
+  <h1>Corso {{ indice + 1 }} di {{ totaleElementi }}</h1>
+
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [indice]="indice"
+    [class.is-first]="primo"
+    [class.is-last]="ultimo"
+    [class.is-even]="paro"
+    [class.is-odd]="disparo"
+  />
+  } -->
+  <!-- @for (course of courses; track course.id;) {
+  <h1>Corso {{ $index + 1 }} di {{ $count }}</h1>
+
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [indice]="$index"
+    [class.is-first]="$first"
+    [class.is-last]="$last"
+    [class.is-even]="$even"
+    [class.is-odd]="$odd"
+  />
+  } -->
+  <!-- in caso di lista vuota posso utilizzare @empty che mi permette di visualizzare qualcosa -->
+  <!-- @empty {
+  <h1>No courses found!</h1>
+  } -->
+
+  <!-- la funzione di tracciamento è obbligatoria, nelle versioni precedenti di angular no -->
+  <!-- possiamo scrivere noi una funzione di tracciamento nel nostro componente, in questo caso in app.component.ts-->
+  <!-- scrivo una funzione che ritorna quello che deve essere utilizzato per il tracciamento e la richiamo nel template -->
+  <!-- in genere si preferisce utilizzare la notazione semplificata e non una funzione -->
+  <!-- in casi estremi si può utilizzare direttamente la posizione dell'elemento nella lista, track $index, ma non è efficiente per ng -->
+  <!-- @for (course of courses; track trackCourse;) {
+  <h1>Corso {{ $index + 1 }} di {{ $count }}</h1>
+
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [indice]="$index"
+    [class.is-first]="$first"
+    [class.is-last]="$last"
+    [class.is-even]="$even"
+    [class.is-odd]="$odd"
+  />
+  } -->
+  <!-- *ngFor directive, si può utilizzare sempre, nelle vecchie versioni c'è solo questa -->
+  <!-- in questo caso la direttiva va indicata nel tag di apertura dell'elemento che vogliamo ciclare -->
+  <!-- non è obbligatoria la funzione di tracciamento -->
+  <!-- tutte le opzioni disponibili con l'@for sono disponibili anche qui, cambia la sintassi, non c'è il $ nelle special keys e si utilizza l'as per dare il nome alias da utilizzare, le special keys devono per forza essere definite e bisogna assegnare un as altrimenti non si possono utilizzare nel codice come si può fare con @for -->
+  <!-- altra differenza è che le variabili che definisco nell'@for le posso utilizzare ovunque all'interno dell'@for statement qui le posso utilizzare solo nel componente -->
+  <course-card
+    *ngFor="
+      let course of courses;
+      count as count;
+      index as indice;
+      first as first;
+      last as last;
+      even as even;
+      odd as odd
+    "
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [count]="count"
+    [indice]="indice"
+    [class.is-first]="first"
+    [class.is-last]="last"
+    [class.is-even]="even"
+    [class.is-odd]="odd"
+  />
+  <!-- per poter aggiornare dalla sintassi ]ngFor a @for si esegue questo comando: ng generate @angular/core:control-flow -->
+  <!-- questa migrazione funziona al 95%, in alcuni casi va fatta a mano -->
+  <!-- funziona per qualsiasi sintassi -->
+</div>
