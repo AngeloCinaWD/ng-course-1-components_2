@@ -5,6 +5,38 @@
   />
 </div>
 
-<div class="courses">
-  <course-card (courseSelected)="onCardClicked($event)" [course]="courses[0]" />
+<div class="courses" *ngIf="courses[0] as course">
+  <course-card (courseSelected)="onCardClicked($event)" [course]="course">
+    <!-- vogliamo passare l'immagine con il suo html in qualche parte del content-tag del componente course-card -->
+    <!-- tutto il codice html che inserisco qui nel content-tag del componente verrà renderizzato nel componente grazie al tag ng-content-->
+
+    <!-- <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
+
+    <h5>
+      ciao ciao sono codice html proiettato nel component tramite ng-content
+    </h5>
+
+    <h1>tag h1</h1> -->
+
+    <div class="course-image">
+      <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
+    </div>
+
+    <h1>tag h1</h1>
+
+    <h5>
+      ciao ciao sono codice html proiettato nel component tramite ng-content
+    </h5>
+
+    <div class="course-description" *ngIf="course.longDescription">
+      {{ course.longDescription }}
+    </div>
+  </course-card>
+
+  <course-card (courseSelected)="onCardClicked($event)" [course]="course">
+    <h5>
+      ciao ciao sono codice html proiettato nel secondo component tramite
+      ng-content
+    </h5>
+  </course-card>
 </div>

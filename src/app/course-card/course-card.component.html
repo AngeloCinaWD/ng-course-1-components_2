@@ -3,14 +3,34 @@
     {{ course?.description }}
   </div>
 
-  @if (checkIconUrl()) {
-  <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
-  } @else {
-  <h1>Nessuna immagine disponibile</h1>
-  }
+  <!-- NG-CONTENT -->
+  <!-- CONTENT PROJECTION -->
+  <!-- voglio passare codice html al componente come se fosse una proprietà -->
 
-  <div class="course-description" *ngIf="course.longDescription">
+  <!-- <img width="300" alt="Angular Logo" [src]="course.iconUrl" /> -->
+
+  <!-- qui, nel tag ng-content, verrà renderizzato il codice html passato nel content-tag del component -->
+  <!-- in questo modo proietto qualsiasi tag html, con la proprietà select posso invece scegliere cosa proiettare -->
+  <!-- in questo modo proietto solo il tag img e l'h5, non l'h1 -->
+  <!-- <ng-content select="h5, img"></ng-content> -->
+  <!-- possiamo anche proiettare per nome di classe di un elemento, ad es. select=".nomeClasse" -->
+  <!-- il codice deve essere in un tag di primo livello, se avessi ad esempio un div con all'interno un altro tag non vedrei il suo interno se non lo specifico, ad esempio il div-course-image con all'interno img -->
+  <!-- in questo caso non vedo l'img -->
+  <!-- <ng-content select="h5, img"></ng-content> -->
+
+  <ng-content select="h5, .course-image"></ng-content>
+
+  <!-- ng content permette di avere più slot -->
+  <!-- passo la description del corso utilizzando la sua classe in un altro ng-content -->
+  <ng-content select=".course-description"></ng-content>
+
+  <!-- <div class="course-description" *ngIf="course.longDescription">
     {{ course.longDescription }}
-  </div>
+  </div> -->
+
+  <!-- aggiungendo un ng-content senza un select mi permette di passare tutto il codice che non è indicato nei select precedenti -->
+  <!-- in questo caso il tag h1 -->
+  <ng-content></ng-content>
+
   <button (click)="onCourseViewed()">View Course</button>
 </div>
