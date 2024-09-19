@@ -18,7 +18,22 @@
   <!-- in questo caso non vedo l'img -->
   <!-- <ng-content select="h5, img"></ng-content> -->
 
-  <ng-content select="h5, .course-image"></ng-content>
+  <!-- <ng-content select="h5, .course-image"></ng-content> -->
+
+  <!-- NGTEMPLATE -->
+  <!-- ng-template mi permette di definire un blocco di codice, dargli un nome e fare riferimento ad esso  -->
+  <!-- il contenuto di un ng-template non viene visualizzato in nessuna parte della pagina, viene conservato da angular ed utilizzato solo quando serve -->
+  <!-- all'interno di un ng-template possiamo accedere a qualsiasi variabile disponibile nel template -->
+  <ng-content
+    select="h5, .course-image"
+    *ngIf="course.iconUrl; else blankImage"
+  ></ng-content>
+
+  <ng-template #blankImage>
+    <p class="warn">No image is available yet.</p>
+
+    <img src="/assets/empty-image.png" alt="" />
+  </ng-template>
 
   <!-- ng content permette di avere più slot -->
   <!-- passo la description del corso utilizzando la sua classe in un altro ng-content -->
