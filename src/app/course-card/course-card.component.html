@@ -26,17 +26,34 @@
   <!-- all'interno di un ng-template possiamo accedere a qualsiasi variabile disponibile nel template -->
   <!-- il contenuto di un ng-template può essere definito e passato come input ad un altro componente, compilandolo tramite variabili, come ci serve -->
 
-  <ng-content
+  <!-- sposto il codice da qui in app.components.html per passarlo come input -->
+
+  <!-- <ng-content
     select="h5, .course-image"
     *ngIf="course.iconUrl; else blankImage"
-  ></ng-content>
+  ></ng-content> -->
 
-  <!-- sposto il codice da qui in app.components.html per passarlo come input -->
   <!-- <ng-template #blankImage>
     <p class="warn">No image is available yet.</p>
 
     <img src="/assets/empty-image.png" alt="" />
   </ng-template> -->
+
+  <ng-content
+    select="h5, .course-image"
+    *ngIf="course.iconUrl; else noImage"
+  ></ng-content>
+
+  <!-- nel content dell'ng-template utilizzo un ng-container con un ngTemplateOutlet che riferisce alla variabile input noImageTemplate definita in course-card.component.ts che arriva da app.component.html che riferisce a sua volta ad un ng-template-->
+  <!-- anche in questo andrà definito un oggetto context coi nomi e i valori delle proprietà da utilizzare nell'ng-template -->
+  <ng-template #noImage>
+    <ng-container
+      *ngTemplateOutlet="
+        noImageTemplate;
+        context: { description: course.description }
+      "
+    ></ng-container>
+  </ng-template>
 
   <!-- ng content permette di avere più slot -->
   <!-- passo la description del corso utilizzando la sua classe in un altro ng-content -->

@@ -8,6 +8,7 @@ import {
   Input,
   Output,
   QueryList,
+  TemplateRef,
 } from "@angular/core";
 import { Course } from "../model/course";
 import { CourseImageComponent } from "../course-image/course-image.component";
@@ -28,6 +29,9 @@ export class CourseCardComponent {
   })
   course: Course;
 
+  // per ricevere un ng-template come input devo utilizzare il decoator @Input e dare come tipo alla variabile TemplateRef
+  @Input()
+  noImageTemplate: TemplateRef<any>;
   // creo l'evento custom courseSelected ed indico che emetterà un oggetto Course
   // devo utilizzare il decoaratore @Output
   @Output()

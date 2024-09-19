@@ -19,7 +19,12 @@
     *ngTemplateOutlet="blankImage; context: { description: course.description }"
   ></ng-container>
 
-  <course-card (courseSelected)="onCardClicked($event)" [course]="course">
+  <!-- per passare un ng-template come input ad un componente -->
+  <course-card
+    (courseSelected)="onCardClicked($event)"
+    [course]="course"
+    [noImageTemplate]="blankImage"
+  >
     <!-- vogliamo passare l'immagine con il suo html in qualche parte del content-tag del componente course-card -->
     <!-- tutto il codice html che inserisco qui nel content-tag del componente verrà renderizzato nel componente grazie al tag ng-content-->
 
