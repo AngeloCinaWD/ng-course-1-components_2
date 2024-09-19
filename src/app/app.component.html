@@ -6,6 +6,19 @@
 </div>
 
 <div class="courses" *ngIf="courses[0] as course">
+  <!-- per passare dati come input dobbiamo definire delle variabili nell'ng-template, lo facciamo con la keyword let-nomeVariabileCamelCase -->
+  <ng-template #blankImage let-courseName="description">
+    <p class="warn">{{ courseName }} No image is available yet.</p>
+
+    <img src="/assets/empty-image.png" alt="" />
+  </ng-template>
+
+  <!-- la direttiva ngTemplateOutlet con reference all'ng-template -->
+  <!-- le variabili che creo nell'ng-template ricevono il valore da un oggetto context che creo nel templateoutlet -->
+  <ng-container
+    *ngTemplateOutlet="blankImage; context: { description: course.description }"
+  ></ng-container>
+
   <course-card (courseSelected)="onCardClicked($event)" [course]="course">
     <!-- vogliamo passare l'immagine con il suo html in qualche parte del content-tag del componente course-card -->
     <!-- tutto il codice html che inserisco qui nel content-tag del componente verrà renderizzato nel componente grazie al tag ng-content-->
