@@ -15,6 +15,8 @@
 
   <!-- la direttiva ngTemplateOutlet con reference all'ng-template -->
   <!-- le variabili che creo nell'ng-template ricevono il valore da un oggetto context che creo nel templateoutlet -->
+  <!-- non si utilizzano in questo modo gli ng-template, l'ngTemplateOutlet (e l'oggetto context) va definito nel component a cui voglio passare l'ng-template -->
+  <!-- questo lo lascio per farlo renderizzare, se lo commentassi non lo vedrei più -->
   <ng-container
     *ngTemplateOutlet="blankImage; context: { description: course.description }"
   ></ng-container>
